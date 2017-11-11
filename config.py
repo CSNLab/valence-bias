@@ -17,7 +17,7 @@ INSTR_FACE = 'Welcome to a new block of pictures of faces. In each of the follow
              'please rate each image as positive or negative as quickly and accurately as possible. ' \
              'Press key "K" for a positive image and key "D" for a negative image. \n\nPress space when ' \
              'you are ready to see the first image.'
-INSTR_SCENE = 'Welcome to a new block of pictures of faces. In each of the following trials, ' \
+INSTR_SCENE = 'Welcome to a new block of pictures of scenes. In each of the following trials, ' \
               'please rate each image as positive or negative as quickly and accurately as possible. ' \
               'Press key "K" for a positive image and key "D" for a negative image. \n\nPress space when y' \
               'ou are ready to see the first image.'
