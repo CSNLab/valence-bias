@@ -9,8 +9,8 @@
       FACE_IMGS[1][i] = FACE_DIR + FACE_IMGS[1][i];
     }
     for (var i = 0; i < SCENE_IMGS[0].length; ++i) {
-      SCENE_IMGS[0][i] = FACE_DIR + SCENE_IMGS[0][i];
-      SCENE_IMGS[1][i] = FACE_DIR + SCENE_IMGS[1][i];
+      SCENE_IMGS[0][i] = SCENE_DIR + SCENE_IMGS[0][i];
+      SCENE_IMGS[1][i] = SCENE_DIR + SCENE_IMGS[1][i];
     }
     var allImgs = FACE_IMGS[0].concat(FACE_IMGS[1]).concat(SCENE_IMGS[0]).concat(SCENE_IMGS[1]);
 
@@ -221,7 +221,6 @@
     add_block_to_timeline('scene', 0);
     add_block_to_timeline('face', 1);
     add_block_to_timeline('scene', 1);
-    console.log(FIXATION_TIMES.length);
 
     function focus() {
         document.getElementById('exp-container').focus();
