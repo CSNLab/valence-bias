@@ -132,7 +132,8 @@ jsPsych.plugins["image-keyboard-response"] = (function() {
     if (trial.stimulus_duration > 0) {
       jsPsych.pluginAPI.setTimeout(function() {
         display_element.querySelector('#jspsych-image-keyboard-response-stimulus').style.visibility = 'hidden';
-        display_element.innerHTML = '<p>+</p>';
+        display_element.querySelector('#jspsych-image-keyboard-response-stimulus').style.position = 'absolute';
+        display_element.innerHTML += '<p>+</p>';
       }, trial.stimulus_duration);
     }
 
