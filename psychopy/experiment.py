@@ -78,7 +78,7 @@ if __name__ == '__main__':
     plus_sign = visual.TextStim(presenter.window, text='+')
     bg = visual.Rect(presenter.window, pos=presenter.CENTRAL_POS, fillColor='#000000', size=(4.1, 4.1))
     # load sequences
-    with open('stim1.csv', 'rU') as csvDataFile:
+    with open('stimuli.csv', 'rU') as csvDataFile:
         reader = csv.reader(csvDataFile)
         face_image_sequences, scene_image_sequences = [], []
         for i in range(2):  # first 2 rows are faces

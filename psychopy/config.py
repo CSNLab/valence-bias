@@ -1,8 +1,8 @@
 # Numbers
 NUM_TRIALS_PER_BLOCK = 24
 # Paths
-IMG_FOLDER_FACES = 'valence_img/faces/'
-IMG_FOLDER_SCENES = 'valence_img/scenes/'
+IMG_FOLDER_FACES = '../valence_img/faces/'
+IMG_FOLDER_SCENES = '../valence_img/scenes/'
 DATA_FOLDER = 'data/'
 LOG_FOLDER = 'log/'
 # Times
