@@ -32,6 +32,7 @@
     } else {
         alert('Invalid user info');
         $('body').empty();
+        cancelFullScreen(document.body);
         return;
     }
     if (userId == 'short') {
@@ -43,6 +44,7 @@
     else if (userId.length < 5 || userId.length > 8 || !userId.startsWith('ucla') || 
         isNaN(sid) || gender.length != 1) {
         alert('Invalid user info');
+        cancelFullScreen(document.body);
         $('body').empty();
         return;
     }
@@ -97,6 +99,7 @@
 
     // data handlers
     function after_exp_finish() {
+        cancelFullScreen(document.body);
         if (firebase_error) {
             $('body').append(INSTR_END_ERR);
             // TODO download data file
@@ -232,7 +235,7 @@
         startTime = new Date();
     }
 
-    // Load images and then start experiment  TODO full screen?
+    // Load images and then start experiment
     var startTime = null;
     var firebase_error = false;
     startExperiment();
