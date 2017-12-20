@@ -17,12 +17,24 @@
             top: 35%;
             left: 40%;
         }
-        .submit-btn {
+        #gender-group .radio {
+            margin-left: 5px;
+        }
+        #instr {
+            position: absolute;
+            left: 25%;
+            width: 50%;
+            top: 20%;
+        }
+        .btn-center {
             display: table;
             margin: auto;
         }
-        #gender-group .radio {
-            margin-left: 5px;
+        .btn {
+            margin: 20px;
+        }
+        .small-width {
+            width: 80px;
         }
     </style>
 
@@ -46,14 +58,58 @@
                             </div>
                         </div>
                     </div>
-                    <button id="submit" type="submit" class="btn btn-primary submit-btn">Submit</button>
+                    <button id="submit" type="submit" class="btn btn-primary btn-center">Submit</button>
                 </form>
+            </div>
+        </div>
+
+        <div id="instr">
+            <div id="page-1">
+                <p>
+                    Welcome to this experiment!<br/><br/>
+                    This is a study about how people react emotionally to images. You will view 4 sets of images of either faces or scenes, and you will be asked to rate how the images made you feel.<br/><br/>
+                    The images will be displayed very briefly, and you won't be able to pause the experiment while it goes through a set of images. Therefore you will need to pay close attention to the screen and be prepared to response quickly. Please make sure that you are currently in a quiet room free of distractions; otherwise, please close this experiment for now and restart later when you are ready.<br/><br/>
+                    This experiment will last for about 8 minutes.<br/><br/>
+                    <input type="checkbox" class="agreement" onchange="checkbox_onchange();"> <strong>I am currently in a quiet room free of distractions.</strong>
+                    <br/>
+                    <input type="checkbox" class="agreement" onchange="checkbox_onchange();"> <strong>I will pay close attention for at least 8 minutes.</strong>
+                </p>
+                <div class="btn-center">
+                    <button id="agree-next" class="next btn btn-info disabled">Next</button>
+                </div>
+            </div>
+            <div id="page-2">
+                <p>You will view 96 images of faces or scenes, divided into 4 sets (24 images per set). After viewing each image, please press <strong>K</strong> if you think it's a <strong>positive</strong> image, or <strong>D</strong> if you think it's a <strong>negative</strong> image.</p>
+                <p>You won't see your choice on the screen, but please respond as fast and accurate as possible.</p>
+                <div class="btn-center">
+                    <button class="prev btn btn-secondary">Previous</button>
+                    <button class="next btn btn-info">Next</button>
+                </div>
+            </div>
+            <div id="page-3">
+                <p>To make sure you understand the instructions, please answer the questions below:</p>
+                <div class="form-group">
+                    <label for="positive-key">Which key should be pressed when you think a image is positive?</label>
+                    <input type="text" id="positive-key" class="form-control small-width" onchange="key_input_onchange();" required>
+                    <label for="negative-key">Which key should be pressed when you think a image is negative?</label>
+                    <input type="text" id="negative-key" class="form-control small-width" onchange="key_input_onchange();" required>
+                </div>
+                <div class="btn-center">
+                    <button class="prev btn btn-secondary">Previous</button>
+                    <button id="key-next" class="next btn btn-info disabled">Next</button>
+                </div>
+            </div>
+            <div id="page-4">
+                <p>Great! Now you can start the experiment whenever you are ready.</p>
+                <div class="btn-center">
+                    <button class="prev btn btn-secondary">Previous</button>
+                    <button class="next btn btn-primary">Start</button>
+                </div>
             </div>
         </div>
 
         <!-- JavaScript -->
         <script>
-            var userId, gender;
             function signin() {
                 $('#user-id').removeClass('is-invalid');
                 userId = $('#user-id').val();
@@ -63,8 +119,69 @@
                     $('#user-id').addClass('is-invalid');
                     return;
                 }
-                window.location.href = 'experiment.html?id=' + userId + '&g=' + gender;
+                $('#info').hide();
+                $('#instr').show();
+                for (var i = 1; i < instrPages.length; ++i) {
+                    instrPages[i].hide();
+                }
             }
+            function checkbox_onchange() {
+                var agree2all = $('.agreement:checked').length == 2;
+                if (agree2all) {
+                    $('#agree-next').removeClass('disabled');
+                } else {
+                    $('#agree-next').addClass('disabled');
+                }
+            }
+            function key_input_onchange() {
+                var posKey = $('#positive-key').val().trim();
+                if (posKey == 'k' || posKey == 'K') {
+                    $('#positive-key').removeClass('is-invalid');
+                    $('#positive-key').addClass('is-valid');
+                } else {
+                    $('#positive-key').removeClass('is-valid');
+                    $('#positive-key').addClass('is-invalid');
+                    $('#key-next').addClass('disabled');
+                    return;
+                }
+                var negKey = $('#negative-key').val().trim();
+                if (negKey == 'd' || negKey == 'D') {
+                    $('#negative-key').removeClass('is-invalid');
+                    $('#negative-key').addClass('is-valid');
+                } else {
+                    $('#negative-key').removeClass('is-valid');
+                    $('#negative-key').addClass('is-invalid');
+                    $('#key-next').addClass('disabled');
+                    return;
+                }
+                $('#key-next').removeClass('disabled');
+            }
+            $('.next').click(function() {
+                if ($(this).hasClass('disabled')) {
+                    return;
+                }
+                instrPages[currentPage].hide();
+                ++currentPage;
+                if (currentPage == instrPages.length) {
+                    // start experiment
+                    window.location.href = 'experiment.html?id=' + userId + '&g=' + gender;
+                } else {
+                    instrPages[currentPage].show();
+                }
+            });
+            $('.prev').click(function() {
+                if ($(this).hasClass('disabled')) {
+                    return;
+                }
+                instrPages[currentPage].hide();
+                --currentPage;
+                instrPages[currentPage].show();
+            });
+
+            var userId, gender;
+            $('#instr').hide();
+            var instrPages = [$('#page-1'), $('#page-2'), $('#page-3'), $('#page-4')];
+            var currentPage = 0;
         </script>
     </body>
 </html>

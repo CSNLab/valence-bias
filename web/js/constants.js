@@ -18,23 +18,16 @@ var FIXATION_TIMES = [
 ];
 
 // instructions
-var INSTR_BEGIN = '<p>' +
-                    'Welcome to the experiment!' + '<br/><br/>' +
-                    'This is a study about how people react emotionally to images.' + '<br/>' +
-                    'You will view four sets of 24 images of either faces or scenes. ' +
-                    'You will also be asked to rate how the images made you feel.' + '<br/><br/>' +
-                    'Press space to continue.'
-                  '</p>';
 var INSTR_FACE = '<p>' +
-                   'In the next block, you will view pictures of faces. In each of the following trials, ' +
+                   'In the next block, you will view pictures of FACES. In each of the following trials, ' +
                    'please rate the image as positive or negative as quickly and accurately as possible. ' +
-                   'Press "K" for a positive image and "D" for a negative image.' + '<br/><br/>' +
+                   'Press K for a positive image and D for a negative image.' + '<br/><br/>' +
                    'Press space when you are ready to see the first image.' +
                  '</p>';
 var INSTR_SCENE = '<p>' +
-                    'In the next block, you will view pictures of scenes. In each of the following trials, ' +
+                    'In the next block, you will view pictures of SCENES. In each of the following trials, ' +
                     'please rate the image as positive or negative as quickly and accurately as possible. ' +
-                    'Press "K" for a positive image and "D" for a negative image.' + '<br/><br/>' +
+                    'Press K for a positive image and D for a negative image.' + '<br/><br/>' +
                     'Press space when you are ready to see the first image.' +
                   '</p>';
 var INSTR_END = '<p class="jspsych-display-element">' +

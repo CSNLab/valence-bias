@@ -163,12 +163,6 @@
 
     // construct timeline
     // instruction pages
-    var beginningInstr = {
-        type: 'instructions',
-        pages: [INSTR_BEGIN],
-        key_forward: 'space',
-        allow_backward: false
-    };
     var faceInstr = {
         type: 'instructions',
         pages: [INSTR_FACE],
@@ -216,7 +210,7 @@
         }
     }
 
-    var timeline = [beginningInstr];
+    var timeline = [];
     add_block_to_timeline('face', 0);
     add_block_to_timeline('scene', 0);
     add_block_to_timeline('face', 1);
