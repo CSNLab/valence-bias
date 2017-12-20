@@ -91,9 +91,9 @@
                 <p>To make sure you understand the instructions, please answer the questions below:</p>
                 <div class="form-group">
                     <label for="positive-key">Which key should be pressed when you think a image is positive?</label>
-                    <input type="text" id="positive-key" class="form-control small-width" onchange="key_input_onchange();" required>
+                    <input type="text" id="positive-key" class="form-control small-width" onchange="key_input_onchange(this);" required>
                     <label for="negative-key">Which key should be pressed when you think a image is negative?</label>
-                    <input type="text" id="negative-key" class="form-control small-width" onchange="key_input_onchange();" required>
+                    <input type="text" id="negative-key" class="form-control small-width" onchange="key_input_onchange(this);" required>
                 </div>
                 <div class="btn-center">
                     <button class="prev btn btn-secondary">Previous</button>
@@ -134,28 +134,25 @@
                     $('#agree-next').addClass('disabled');
                 }
             }
-            function key_input_onchange() {
-                var posKey = $('#positive-key').val().trim();
-                if (posKey == 'k' || posKey == 'K') {
-                    $('#positive-key').removeClass('is-invalid');
-                    $('#positive-key').addClass('is-valid');
+            function key_input_onchange(item) {
+                var jqueryItem = $('#' + item.id);
+                var userInput = jqueryItem.val().trim();
+                if ( (item.id == 'positive-key' && (userInput == 'k' || userInput == 'K')) ||
+                     (item.id == 'negative-key' && (userInput == 'd' || userInput == 'D')) ) {
+                    // correct
+                    jqueryItem.removeClass('is-invalid');
+                    jqueryItem.addClass('is-valid');
                 } else {
-                    $('#positive-key').removeClass('is-valid');
-                    $('#positive-key').addClass('is-invalid');
-                    $('#key-next').addClass('disabled');
-                    return;
+                    // incorrect
+                    jqueryItem.removeClass('is-valid');
+                    jqueryItem.addClass('is-invalid');
+                    jqueryItem.addClass('disabled');
                 }
-                var negKey = $('#negative-key').val().trim();
-                if (negKey == 'd' || negKey == 'D') {
-                    $('#negative-key').removeClass('is-invalid');
-                    $('#negative-key').addClass('is-valid');
+                if ($('#negative-key').hasClass('is-valid') && $('#positive-key').hasClass('is-valid')) {
+                    $('#key-next').removeClass('disabled');
                 } else {
-                    $('#negative-key').removeClass('is-valid');
-                    $('#negative-key').addClass('is-invalid');
                     $('#key-next').addClass('disabled');
-                    return;
                 }
-                $('#key-next').removeClass('disabled');
             }
             $('.next').click(function() {
                 if ($(this).hasClass('disabled')) {
