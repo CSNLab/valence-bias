@@ -32,7 +32,7 @@
     } else {
         alert('Invalid user info');
         $('body').empty();
-        cancelFullScreen(document.body);
+        cancelFullScreen(document);
         return;
     }
     if (userId == 'short') {
@@ -44,7 +44,7 @@
     else if (userId.length < 5 || userId.length > 8 || !userId.startsWith('ucla') || 
         isNaN(sid) || gender.length != 1) {
         alert('Invalid user info');
-        cancelFullScreen(document.body);
+        cancelFullScreen(document);
         $('body').empty();
         return;
     }
@@ -99,7 +99,7 @@
 
     // data handlers
     function after_exp_finish() {
-        cancelFullScreen(document.body);
+        cancelFullScreen(document);
         if (firebase_error) {
             $('body').append(INSTR_END_ERR);
             // TODO download data file
