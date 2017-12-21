@@ -6,7 +6,8 @@ var userId = '',
     gender = null,
     startTime = null,
     expData = {},
-    hookWindow = false;
+    hookWindow = false,
+    firebaseError = false;
 
 function download_data() {
     // data file content
@@ -268,7 +269,10 @@ function download_data() {
     }
 
     // start experiment
-    var firebaseError = false;
-    startExperiment();
-    focus();
+    $('#start').click(function() {
+        $('#instr-start').hide();
+        requestFullScreen(document.body);
+        startExperiment();
+        focus();
+    });
 })();

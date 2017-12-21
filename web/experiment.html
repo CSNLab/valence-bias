@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <title>Experiment</title>
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
         <script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
 
         <script type="text/javascript" src="js/jspsych.js"></script>
@@ -12,10 +13,17 @@
         <script type="text/javascript" src="js/jspsych-image-keyboard-response.js"></script>
         <link type="text/css" href="css/jspsych.css" rel="stylesheet"></link>
 
+        <link type="text/css" href="css/instructions.css" rel="stylesheet"></link>
         <link type="text/css" href="css/experiment.css" rel="stylesheet"></link>
     </head>
 
     <body>
+        <div id="instr-start">
+            <p>Great! Now you can start the experiment whenever you are ready.</p>
+            <div class="btn-center">
+                <button id="start" class="btn btn-primary">Start</button>
+            </div>
+        </div>
         <div id="exp-container" align="center"></div>
         <div id="json-download" style="display:none"></div>
 

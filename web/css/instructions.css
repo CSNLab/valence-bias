@@ -1,0 +1,25 @@
+#info-form {
+    position: absolute;
+    width: 20%;
+    top: 35%;
+    left: 40%;
+}
+#gender-group .radio {
+    margin-left: 5px;
+}
+#instr {
+    position: absolute;
+    left: 25%;
+    width: 50%;
+    top: 20%;
+}
+.btn-center {
+    display: table;
+    margin: auto;
+}
+.btn {
+    margin: 20px;
+}
+.small-width {
+    width: 80px;
+}

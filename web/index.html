@@ -8,36 +8,8 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
         <script type="text/javascript" src="js/fullscreen.js"></script>
+        <link type="text/css" href="css/instructions.css" rel="stylesheet"></link>
     </head>
-
-    <!-- CSS -->
-    <style type="text/css">
-        #info-form {
-            position: absolute;
-            width: 20%;
-            top: 35%;
-            left: 40%;
-        }
-        #gender-group .radio {
-            margin-left: 5px;
-        }
-        #instr {
-            position: absolute;
-            left: 25%;
-            width: 50%;
-            top: 20%;
-        }
-        .btn-center {
-            display: table;
-            margin: auto;
-        }
-        .btn {
-            margin: 20px;
-        }
-        .small-width {
-            width: 80px;
-        }
-    </style>
 
     <!-- HTML -->
     <body>
@@ -100,13 +72,6 @@
                     <button id="key-next" class="next btn btn-info disabled">Next</button>
                 </div>
             </div>
-            <div id="page-4">
-                <p>Great! Now you can start the experiment whenever you are ready.</p>
-                <div class="btn-center">
-                    <button class="prev btn btn-secondary">Previous</button>
-                    <button class="next btn btn-primary">Start</button>
-                </div>
-            </div>
         </div>
 
         <!-- JavaScript -->
@@ -162,7 +127,6 @@
                 ++currentPage;
                 if (currentPage == instrPages.length) {
                     // start experiment
-                    requestFullScreen(document.body);
                     window.location.href = 'experiment.html?id=' + userId + '&g=' + gender;
                 } else {
                     instrPages[currentPage].show();
@@ -179,7 +143,7 @@
 
             var userId, gender;
             $('#instr').hide();
-            var instrPages = [$('#page-1'), $('#page-2'), $('#page-3'), $('#page-4')];
+            var instrPages = [$('#page-1'), $('#page-2'), $('#page-3')];
             var currentPage = 0;
         </script>
     </body>
