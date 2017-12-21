@@ -1,8 +1,36 @@
 'use strict';
 
-(function () {
-    var hookWindow = false;
+var userId = '',
+    firebaseUid = null,
+    sid = null,
+    gender = null,
+    startTime = null,
+    expData = {},
+    hookWindow = false;
 
+function download_data() {
+    // data file content
+    var dataJson = {
+        userId: {
+            firebase_uid: firebaseUid || 'none',
+            gender: gender,
+            sid: sid || 'none',
+            startTime: expData
+        }
+    }
+    // download data file
+    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataJson));
+    var dlAnchor = $('<a>', {
+        id: 'download-link',
+        href: 'data:' + dataStr,
+        download: userId + '_' + startTime.getTime() + '.json'
+    });
+    dlAnchor.appendTo('#json-download');
+    dlAnchor.get(0).click();
+}
+
+
+(function () {
     // process image names
     for (var i = 0; i < FACE_IMGS[0].length; ++i) {
       FACE_IMGS[0][i] = FACE_DIR + FACE_IMGS[0][i];
@@ -19,9 +47,6 @@
     var keyMapping = {'-1': 'none', '68': 'd', '75': 'k'};
 
     // parse user info in URL
-    var userId = '',
-        sid = null,
-        gender = null;
     var parameters = window.location.search.substring(1);
 
     if (parameters.length > 11 && parameters.length < 15) {
@@ -32,19 +57,19 @@
     } else {
         alert('Invalid user info');
         $('body').empty();
-        cancelFullScreen(document);
+        cancelFullScreen();
         return;
     }
     if (userId == 'short') {
         FACE_IMGS[0] = FACE_IMGS[0].slice(0, 2);
         FACE_IMGS[1] = FACE_IMGS[1].slice(0, 2);
-        SCENE_IMGS[0] = FACE_IMGS[0].slice(0, 2);
-        SCENE_IMGS[1] = FACE_IMGS[1].slice(0, 2);
+        SCENE_IMGS[0] = SCENE_IMGS[0].slice(0, 2);
+        SCENE_IMGS[1] = SCENE_IMGS[1].slice(0, 2);
     }
     else if (userId.length < 5 || userId.length > 8 || !userId.startsWith('ucla') || 
         isNaN(sid) || gender.length != 1) {
         alert('Invalid user info');
-        cancelFullScreen(document);
+        cancelFullScreen();
         $('body').empty();
         return;
     }
@@ -58,7 +83,6 @@
     }
 
     // initialize firebase
-    var firebaseUid = null;
     var config = {
         apiKey: "AIzaSyByDfAISXKXywYhmEFPq1chpVyVeDneYMA",
         authDomain: "valence-bias.firebaseapp.com",
@@ -72,7 +96,7 @@
         // $('body').empty();
         alert('Error: Cannot connect to Firebase. Please check your internet connection.\n\n' + 
               error.code + ': ' + error.message);
-        firebase_error = true;
+        firebaseError = true;
     });
     firebase.auth().onAuthStateChanged(function(user) {
         if (!user) {
@@ -89,7 +113,6 @@
                 }
             } else {  // user does not exist
                 firebase.database().ref(userId + '/').set({
-                    firebase_uid: firebaseUid,
                     gender: gender,
                     sid: sid || 'none'
                 });
@@ -98,17 +121,20 @@
     });
 
     // data handlers
-    function after_exp_finish() {
-        cancelFullScreen(document);
-        if (firebase_error) {
-            $('body').append(INSTR_END_ERR);
-            // TODO download data file
-        }
-        else {
-            $('body').append(INSTR_END);
-            firebase.auth().currentUser.delete();
+    function after_exp_finish(download) {
+        if (!hookWindow) {  // already done
+            return;
         }
         hookWindow = false;
+        $('#instr-wait').remove();
+        if (firebaseError || download) {
+            $('#exp-container').append(INSTR_END_ERR);
+            download_data();
+        }
+        else {
+            $('#exp-container').append(INSTR_END);
+            firebase.auth().currentUser.delete();
+        }
     }
 
     function on_exp_finish() {
@@ -119,15 +145,21 @@
             duration: endTime.getTime() - startTime.getTime()
         };
         var updates = {};
+        updates[userId + '/' + startTime + '/firebase_uid'] = firebaseUid;
         updates[userId + '/' + startTime + '/start_time'] = startTime.getTime();
         updates[userId + '/' + startTime + '/end_time'] = endTime.getTime();
         updates[userId + '/' + startTime + '/duration'] = endTime.getTime() - startTime.getTime();
         firebase.database().ref().update(updates).then(function() {
-            after_exp_finish();
+            after_exp_finish(false);
         }, function() {
-            firebase_error = true;
-            after_exp_finish();
+            firebaseError = true;
+            after_exp_finish(true);
         });
+        cancelFullScreen();
+        $('#exp-container').append(INSTR_WAIT);
+        setTimeout(function() {
+            after_exp_finish(true);
+        }, 10000);  // wait for 10 sec if firebase does not respond
     }
 
     function on_trial_finish(data) {
@@ -150,18 +182,18 @@
                 rt: data.rt
             }
         }
+        expData[data.trial_index] = data;
 
         // send to firebase
         var userRef = firebase.database().ref(userId + '/' + startTime + '/' + data.trial_index);
-        userRef.set(data).then(function() {
-            // success
-            if (data['trial_index'] == timeline.length - 1) {  // last trial
-                on_exp_finish();
-            }
-        }, function() {
+        userRef.set(data).then(null, function() {
             // failed
-            firebase_error = true;
+            firebaseError = true;
         });
+
+        if (data['trial_index'] == timeline.length - 1) {  // last trial
+            on_exp_finish();
+        }
     }
 
     // construct timeline
@@ -235,9 +267,8 @@
         startTime = new Date();
     }
 
-    // Load images and then start experiment
-    var startTime = null;
-    var firebase_error = false;
+    // start experiment
+    var firebaseError = false;
     startExperiment();
     focus();
 })();

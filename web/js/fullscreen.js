@@ -1,6 +1,6 @@
 // full screen methods
 
-function requestFullScreen(element) {
+function requestFullScreen(element) {  // call this function with e.g. document.body
     var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
 
     if (requestMethod) { // Native full screen
@@ -13,11 +13,11 @@ function requestFullScreen(element) {
     }
 }
 
-function cancelFullScreen(element) {
-    var cancelMethod = element.exitFullscreen || element.webkitCancelFullScreen || element.mozCancelFullScreen || element.msExitFullscreen;
+function cancelFullScreen() {
+    var cancelMethod = document.exitFullscreen || document.webkitCancelFullScreen || document.mozCancelFullScreen || document.msExitFullscreen;
 
     if (cancelMethod) {
-        cancelMethod.call(element);
+        cancelMethod.call(document);
     } else if (typeof window.ActiveXObject !== "undefined") {  // Older IE
         var wscript = new ActiveXObject("WScript.Shell");
         if (wscript !== null) {

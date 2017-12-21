@@ -30,14 +30,19 @@ var INSTR_SCENE = '<p>' +
                     'Press K for a positive image and D for a negative image.' + '<br/><br/>' +
                     'Press space when you are ready to see the first image.' +
                   '</p>';
-var INSTR_END = '<p class="jspsych-display-element">' +
+var INSTR_WAIT = '<p id="instr-wait">' +
+                   'Please wait...' +
+                 '</p>';
+var INSTR_END = '<p>' +
                   'This is the end of the experiment. Your responses have been recorded.' + '<br/><br/>' +
                   'Thank you for participating!' +
                 '</p>';
-var INSTR_END_ERR = '<p class="jspsych-display-element">' +
+var INSTR_END_ERR = '<p>' +
                       'You have completed the experiment, but we were unable to record your responses.' + '<br/><br/>' +
-                      'Please send the downloaded data file to the experimenter through email. Thank you very much!' +
+                      'Your browser should be downloading a data file now -- please send the downloaded data file to ' +
+                      'the experimenter through email.' + '<br/><br/>' +
+                      'Thank you very much!' +
                     '</p>';
 
 var REPEAT_ALERT = 'It looks like you have done this experiment before. If for some reason you have to do it again, ' +
-                   'please let the experimenter know.'
+                   'please let the experimenter know before you start.'
