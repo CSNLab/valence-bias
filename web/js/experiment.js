@@ -255,6 +255,21 @@ function download_data() {
     function focus() {
         document.getElementById('exp-container').focus();
     }
+    $('#dark-matter').click(focus);
+
+    function on_fullscreen_change() {
+        // no idea why this works, but it does
+        // otherwise the elements would go to the top after exiting fullscreen
+        // this doesn't work with firefox when entering fullscreen though (?)
+        $('body').css({'display': 'block'});
+        setTimeout(function () {
+            $('body').css({'display': 'table-cell'});
+        }, 1);
+    }
+    document.onfullscreenchange = on_fullscreen_change;
+    document.onwebkitfullscreenchange = on_fullscreen_change;
+    document.onmozfullscreenchange = on_fullscreen_change;
+    document.MSFullscreenChange = on_fullscreen_change;
 
     function startExperiment() {
         hookWindow = true;

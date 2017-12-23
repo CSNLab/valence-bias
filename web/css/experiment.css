@@ -11,6 +11,7 @@ body {
   background-color: black;
   display: table-cell;
   vertical-align: middle;
+  overflow: hidden;
 }
 
 p {
@@ -19,6 +20,15 @@ p {
   font-size: 28px;
   color: white;
   text-align: left;
+}
+
+#dark-matter {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 8000px;
+  height: 6000px;
+  z-index: -10;
 }
 
 #exp-container {
