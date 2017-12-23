@@ -11,8 +11,8 @@ IMG_TIME = 0.5
 # Instructions
 INSTR_BEGIN = ['Welcome to the experiment!',
                'This is a study about how people react emotionally to images. '
-               'You will view four sets of 24 images of either faces or scenes. '
-               'You will be asked to rate how that image made you feel.']
+               'You will view four sets of 24 images of either faces or scenes, '
+               'and you will be asked to rate the images as postiive or negative.']
 INSTR_FACE = 'Welcome to a new block of pictures of faces. In each of the following trials, ' \
              'please rate each image as positive or negative as quickly and accurately as possible. ' \
              'Press key "K" for a positive image and key "D" for a negative image. \n\nPress space when ' \
