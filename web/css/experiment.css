@@ -1,4 +1,5 @@
 html, body {
+  background-color: white;
   height: 100%;
 }
 
@@ -8,7 +9,6 @@ html {
 }
 
 body {
-  background-color: black;
   display: table-cell;
   vertical-align: middle;
   overflow: hidden;
@@ -18,11 +18,12 @@ p {
   padding: 50px;
   line-height: 35px;
   font-size: 28px;
-  color: white;
+  color: black;
   text-align: left;
 }
 
 #dark-matter {
+  background-color: white;
   position: absolute;
   left: 0;
   top: 0;
