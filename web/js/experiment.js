@@ -289,5 +289,6 @@ function download_data() {
         requestFullScreen(document.body);
         startExperiment();
         focus();
+        $('<style> * {cursor: none;} </style>').appendTo('head');  // hide cursor
     });
 })();
