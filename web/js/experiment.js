@@ -45,7 +45,7 @@ function download_data() {
 
     // response keys
     var responseKeys = ['d','k'];
-    var keyMapping = {'-1': 'none', '68': 'd', '75': 'k'};
+    var keyMapping = {'null': 'none', '68': 'd', '75': 'k'};
 
     // parse user info in URL
     var parameters = window.location.search.substring(1);
@@ -179,8 +179,18 @@ function download_data() {
                 trial_type: 'image-response',
                 trial_index: data.trial_index,
                 stimulus: data['stimulus'].substring(15),
-                key_pressed: keyMapping[data.key_press],
-                rt: data.rt
+                key_pressed: keyMapping[data.key_press || 'null'],
+                rt: data.rt || -1
+            }
+        }
+        else if (data.trial_type == 'categorize-image') {
+            data = {
+                trial_type: 'practice',
+                trial_index: data.trial_index,
+                stimulus: data['stimulus'].substring(12),
+                key_pressed: keyMapping[data.key_press || 'null'],
+                correct: data.correct,
+                rt: data.rt || -1
             }
         }
         expData[data.trial_index] = data;

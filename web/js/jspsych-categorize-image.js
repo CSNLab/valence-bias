@@ -112,7 +112,7 @@ jsPsych.plugins['categorize-image'] = (function() {
     if (trial.stimulus_duration !== null) {
       jsPsych.pluginAPI.setTimeout(function() {
         display_element.querySelector('#jspsych-categorize-image-stimulus').style.visibility = 'hidden';
-        display_element.querySelector('#jspsych-image-keyboard-response-stimulus').style.position = 'absolute';
+        display_element.querySelector('#jspsych-categorize-image-stimulus').style.position = 'absolute';
         display_element.innerHTML += '<p>+</p>';
       }, trial.stimulus_duration);
     }
