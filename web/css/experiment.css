@@ -36,3 +36,11 @@ p {
   overflow: hidden;
   z-index: 1;
 }
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}

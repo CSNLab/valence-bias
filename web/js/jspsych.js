@@ -228,7 +228,7 @@ window.jsPsych = (function() {
     opts.on_data_update(trial_data_values);
 
     // wait for iti
-    if (typeof current_trial.post_trial_gap == 'undefined') {
+    if (typeof current_trial.post_trial_gap === null) {
       if (opts.default_iti > 0) {
         setTimeout(nextTrial, opts.default_iti);
       } else {
@@ -793,6 +793,11 @@ window.jsPsych = (function() {
 
     // execute trial method
     jsPsych.plugins[trial.type].trial(DOM_target, trial);
+
+    // call trial specific loaded callback if it exists
+    if(typeof trial.on_load == 'function'){
+      trial.on_load();
+    }
   }
 
   function evaluateTimelineVariables(trial){
@@ -804,7 +809,7 @@ window.jsPsych = (function() {
         trial[keys[i]] = trial[keys[i]].call();
       }
       // timeline variables that are nested in objects
-      if (typeof trial[keys[i]] == "object"){
+      if (typeof trial[keys[i]] == "object" && trial[keys[i]] !== null){
         evaluateTimelineVariables(trial[keys[i]]);
       }
     }
@@ -967,10 +972,16 @@ jsPsych.plugins = (function() {
       default: function() { return; },
       description: 'Function to execute when trial is finished'
     },
+    on_load: {
+      type: module.parameterType.FUNCTION,
+      pretty_name: 'On load',
+      default: function() { return; },
+      description: 'Function to execute after the trial has loaded'
+    },
     post_trial_gap: {
       type: module.parameterType.INT,
       pretty_name: 'Post trial gap',
-      default: undefined,
+      default: null,
       description: 'Length of gap between the end of this trial and the start of the next trial'
     }
   }
@@ -1956,6 +1967,17 @@ jsPsych.pluginAPI = (function() {
     return undefined;
   }
 
+  module.compareKeys = function(key1, key2){
+    // convert to numeric values no matter what
+    if(typeof key1 == 'string') {
+      key1 = module.convertKeyCharacterToKeyCode(key1);
+    }
+    if(typeof key2 == 'string') {
+      key2 = module.convertKeyCharacterToKeyCode(key2);
+    }
+    return key1 == key2;
+  }
+
   var keylookup = {
     'backspace': 8,
     'tab': 9,
@@ -2335,6 +2357,7 @@ jsPsych.utils = (function() {
 	}
 
 	module.deepCopy = function(obj) {
+    if(!obj) return obj;
     var out;
     if(Array.isArray(obj)){
       out = [];

@@ -1,6 +1,7 @@
 // times (in ms)
 var IMG_TIME = 500;
 var INITIAL_FIXATION_TIME = 3000;
+var PRAC_FEEDBACK_TIME = 3500;
 // images
 var FACE_DIR = '../valence_img/faces/';
 var SCENE_DIR = '../valence_img/scenes/';
@@ -8,6 +9,9 @@ var FACE_IMGS = [['28M_AN_C.jpg', 'AM01HAS.jpg', '08F_SP_O.jpg', '27M_SP_O.jpg',
                  ['28M_HA_O.jpg', '09F_SP_O.jpg', '01F_AN_C.jpg', 'AF14ANS.jpg', '20M_SP_O.jpg', 'AF01SUS.jpg', '36M_HA_O.jpg', '01F_HA_O.jpg', 'AF30SUS.jpg', 'AM06SUS.jpg', '01F_SP_O.jpg', '09F_AN_C.jpg', '07F_HA_O.jpg', '20M_AN_C.jpg', '07F_SP_O.jpg', '28M_SP_O.jpg', '37M_AN_C.jpg', 'AF02SUS.jpg', 'AF08HAS.jpg', 'AM18SUS.jpg', 'AM14HAS.jpg', '02F_SP_O.jpg', '03F_AN_C.jpg', 'AM13SUS.jpg']];
 var SCENE_IMGS = [['N9185.jpg', 'A2339.jpg', 'A3211.jpg', 'P1460.jpg', 'N9830.jpg', 'P1710.jpg', 'A4598.jpg', 'P2347.jpg', 'P8380.jpg', 'A7460.jpg', 'N9163.jpg', 'A1030.jpg', 'A2485.jpg', 'A3310.jpg', 'A3360.jpg', 'N9910.jpg', 'P2091.jpg', 'A6837.jpg', 'P2550.jpg', 'A8060.jpg', 'N9220.jpg', 'A8178.jpg', 'N2717.jpg', 'A2480.jpg'],
                   ['N9295.jpg', 'N9600.jpg', 'A2704.jpg', 'P5825.jpg', 'A7570.jpg', 'A8010.jpg', 'P1440.jpg', 'A8501.jpg', 'A4233.jpg', 'A1560.jpg', 'P2057.jpg', 'P7502.jpg', 'P1441.jpg', 'A2688.jpg', 'A7430.jpg', 'N9050.jpg', 'P2340.jpg', 'A7590.jpg', 'N9424.jpg', 'A1303.jpg', 'N7380.jpg', 'A7620.jpg', 'N9421.jpg', 'A8466.jpg']];
+var PRAC_IMGS = ['../prac_img/prac_face1.jpg', '../prac_img/prac_face2.jpg', '../prac_img/prac_face3.jpg',
+                 '../prac_img/prac_scene1.jpg', '../prac_img/prac_scene2.jpg', '../prac_img/prac_scene3.jpg']
+var PRAC_IMG_ANSWERS = ['d', 'k', 'd', 'd', 'k', 'k']
 
 // fixation times in seconds (fixation_times.csv reversed)
 var FIXATION_TIMES = [
@@ -30,6 +34,14 @@ var INSTR_SCENE = '<p>' +
                     'Press K for a positive image and D for a negative image.' + '<br/><br/>' +
                     'Press space when you are ready to see the first image.' +
                   '</p>';
+var INSTR_PRAC = '<p>' +
+                    'Before the experiment starts, you will first go through a few practice trials.' +
+                    'In each of the following trials, please rate the image as positive or negative ' +
+                    'as quickly and accurately as possible.' + '<br/><br/>' +
+                    'Press K for a positive image and D for a negative image.' + '<br/><br/>' +
+                    'You will see feedback in these practice trials, but not later in the experiment. ' +
+                    'Now, press space when you are ready to see the first image.'
+                 '</p>'
 var INSTR_WAIT = '<p id="instr-wait">' +
                    'Please wait...' +
                  '</p>';
