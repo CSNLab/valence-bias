@@ -48,7 +48,7 @@ function key_input_onchange(item) {
 $('#sound-ok').click(function() {
     $('#safari-sound').hide();
     $('#page-1').show();
-}
+});
 
 $('.next').click(function() {
     if ($(this).hasClass('disabled')) {
