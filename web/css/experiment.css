@@ -37,6 +37,11 @@ p {
   z-index: 1;
 }
 
+.btn-center {
+    display: table;
+    margin: auto;
+}
+
 .green {
   color: green;
 }

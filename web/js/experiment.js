@@ -120,7 +120,7 @@ function download_data() {
                     alert(REPEAT_ALERT);
                 }
             } else {  // user does not exist
-                firebase.database().ref(userId + '/').set({
+                firebase.database().ref(userId + '/' + startTime + '/').set({
                     gender: gender,
                     sid: sid || 'n/a',
                     environment: environment || 'n/a'
@@ -142,7 +142,6 @@ function download_data() {
         }
         else {
             $('#exp-container').append(INSTR_END);
-            firebase.auth().currentUser.delete();
         }
     }
 
