@@ -45,6 +45,11 @@ function key_input_onchange(item) {
 }
 
 // page flipping
+$('#sound-next').click(function()) {
+    $('#safari-sound').hide();
+    $('#page-1').show();
+}
+
 $('.next').click(function() {
     if ($(this).hasClass('disabled')) {
         return;
