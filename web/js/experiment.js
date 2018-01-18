@@ -46,7 +46,7 @@ function download_data() {
 
     // response keys
     var responseKeys = ['d','k'];
-    var keyMapping = {'-1': 'none', '68': 'd', '75': 'k'};
+    var keyMapping = {'null': 'none', '68': 'd', '75': 'k'};
 
     // parse user info in URL
     var parameters = window.location.search.substring(1);
@@ -190,8 +190,18 @@ function download_data() {
                 trial_type: 'image-response',
                 trial_index: data.trial_index,
                 stimulus: data['stimulus'].substring(15),
-                key_pressed: keyMapping[data.key_press],
-                rt: data.rt
+                key_pressed: keyMapping[data.key_press || 'null'],
+                rt: data.rt || -1
+            }
+        }
+        else if (data.trial_type == 'categorize-image') {
+            data = {
+                trial_type: 'practice',
+                trial_index: data.trial_index,
+                stimulus: data['stimulus'].substring(12),
+                key_pressed: keyMapping[data.key_press || 'null'],
+                correct: data.correct,
+                rt: data.rt || -1
             }
         }
         expData[data.trial_index] = data;
@@ -222,6 +232,12 @@ function download_data() {
         key_forward: 'space',
         allow_backward: false
     };
+    var pracInstr = {
+        type: 'instructions',
+        pages: [INSTR_PRAC],
+        key_forward: 'space',
+        allow_backward: false
+    };
 
     function add_block_to_timeline(block_name, index) {
         var imgs;
@@ -232,15 +248,14 @@ function download_data() {
         } else if (block_name == 'scene') {
             timeline.push(sceneInstr);
             imgs = SCENE_IMGS[index];
-        }
-        else {
+        } else {
             throw 'Error: Wrong type of block.';
         }
         // initial fixation
         timeline.push({
             type: 'html-keyboard-response',
             stimulus: '<p>+</p>',
-            choices: [],
+            choices: jsPsych.NO_KEYS,
             trial_duration: INITIAL_FIXATION_TIME,
             response_ends_trial: false
         });
@@ -257,7 +272,41 @@ function download_data() {
         }
     }
 
+    function add_prac_to_timeline() {
+        timeline.push(pracInstr);
+        var ans_types = {'d': 'negative', 'k': 'positive'}
+        for (var i = 0; i < PRAC_IMGS.length; ++i) {
+            // fixation
+            timeline.push({
+                type: 'html-keyboard-response',
+                stimulus: '<p>+</p>',
+                choices: jsPsych.NO_KEYS,
+                trial_duration: 800 + Math.random() * 2000,
+                response_ends_trial: false
+            });
+            // image
+            timeline.push({
+                type: 'categorize-image',
+                stimulus: PRAC_IMGS[i],
+                choices: ['d','k'],
+                key_answer: jsPsych.pluginAPI.convertKeyCharacterToKeyCode(PRAC_IMG_ANSWERS[i]),
+                text_answer: ans_types[PRAC_IMG_ANSWERS[i]],
+                stimulus_duration: IMG_TIME,
+                trial_duration: IMG_TIME + 1000 + Math.random() * 2000,
+                feedback_duration: PRAC_FEEDBACK_TIME,
+                response_ends_trial: false,
+                correct_text: '<p><span class="green">Correct!</span> This image is %ANS%.<br/><br/>' +
+                              'Your reaction time was %RT%ms.</p>',
+                incorrect_text: '<p><span class="red">Incorrect!</span> This image is %ANS%.<br/><br/>' +
+                                'Your reaction time was %RT%ms.</p>',
+                timeout_message: '<p><span class="red">Please respond faster.</span><br/><br/>' +
+                                 'Press K for a positive image or D for a negative image.</p>'
+            });
+        }
+    }
+
     var timeline = [];
+    add_prac_to_timeline();
     add_block_to_timeline('face', 0);
     add_block_to_timeline('scene', 0);
     add_block_to_timeline('face', 1);
