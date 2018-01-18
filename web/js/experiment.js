@@ -119,13 +119,12 @@ function download_data() {
                 if (userId != 'short') {
                     alert(REPEAT_ALERT);
                 }
-            } else {  // user does not exist
-                firebase.database().ref(userId + '/' + startTime + '/').set({
-                    gender: gender,
-                    sid: sid || 'n/a',
-                    environment: environment || 'n/a'
-                });
             }
+            firebase.database().ref(userId + '/' + startTime + '/').set({
+                gender: gender,
+                sid: sid || 'n/a',
+                environment: environment || 'n/a'
+            });
         });
     });
 
