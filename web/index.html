@@ -3,12 +3,12 @@
     <head>
         <meta charset="UTF-8">
         <title>Survey</title>
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
         <script type="text/javascript" src="js/fullscreen.js"></script>
-        <link type="text/css" href="css/instructions.css" rel="stylesheet"></link>
+        <link type="text/css" href="css/landing.css" rel="stylesheet"></link>
     </head>
 
     <!-- HTML -->
@@ -36,7 +36,15 @@
             </div>
         </div>
 
-        <div id="instr">
+        <div id="instr" style="display: none;">
+            <div id="warnings">
+                <p id="incompatible" style="display: none;">
+                    Your browser may not be compatible with this experiment. We suggest you use the latest Google Chrome browser (you can download it <a href="https://www.google.com/chrome/browser/desktop/">here</a>.)<br/><br/>
+                </p>
+                <p id="safari-sound" style="display: none;">
+                    Please turn off the sound on your computer during the experiment.
+                </p>
+            </div>
             <div id="page-1">
                 <p>
                     Welcome to this experiment!<br/><br/>
@@ -51,7 +59,7 @@
                     <button id="agree-next" class="next btn btn-info disabled">Next</button>
                 </div>
             </div>
-            <div id="page-2">
+            <div id="page-2" style="display: none;">
                 <p>You will view 96 images of faces or scenes, divided into 4 sets (24 images per set). After viewing each image, please press <strong>K</strong> if you think it's a <strong>positive</strong> image, or <strong>D</strong> if you think it's a <strong>negative</strong> image.</p>
                 <p>You won't see your choice on the screen, but please respond as quickly and accurately as possible.</p>
                 <div class="btn-center">
@@ -59,7 +67,7 @@
                     <button class="next btn btn-info">Next</button>
                 </div>
             </div>
-            <div id="page-3">
+            <div id="page-3" style="display: none;">
                 <p>To make sure you understand the instructions, please answer the questions below:</p>
                 <div class="form-group">
                     <label for="positive-key">Which key should be pressed when you think a image is positive?</label>
@@ -74,77 +82,9 @@
             </div>
         </div>
 
-        <!-- JavaScript -->
-        <script>
-            function signin() {
-                $('#user-id').removeClass('is-invalid');
-                userId = $('#user-id').val();
-                gender = $("input[name='gender']:checked").val();
-                if (userId != 'short' && (!userId.startsWith('ucla') || isNaN(userId.substring(4)))) {
-                    // error checking
-                    $('#user-id').addClass('is-invalid');
-                    return;
-                }
-                $('#info').hide();
-                $('#instr').show();
-                for (var i = 1; i < instrPages.length; ++i) {
-                    instrPages[i].hide();
-                }
-            }
-            function checkbox_onchange() {
-                var agree2all = $('.agreement:checked').length == 2;
-                if (agree2all) {
-                    $('#agree-next').removeClass('disabled');
-                } else {
-                    $('#agree-next').addClass('disabled');
-                }
-            }
-            function key_input_onchange(item) {
-                var jqueryItem = $('#' + item.id);
-                var userInput = jqueryItem.val().trim();
-                if ( (item.id == 'positive-key' && (userInput == 'k' || userInput == 'K')) ||
-                     (item.id == 'negative-key' && (userInput == 'd' || userInput == 'D')) ) {
-                    // correct
-                    jqueryItem.removeClass('is-invalid');
-                    jqueryItem.addClass('is-valid');
-                } else {
-                    // incorrect
-                    jqueryItem.removeClass('is-valid');
-                    jqueryItem.addClass('is-invalid');
-                    jqueryItem.addClass('disabled');
-                }
-                if ($('#negative-key').hasClass('is-valid') && $('#positive-key').hasClass('is-valid')) {
-                    $('#key-next').removeClass('disabled');
-                } else {
-                    $('#key-next').addClass('disabled');
-                }
-            }
-            $('.next').click(function() {
-                if ($(this).hasClass('disabled')) {
-                    return;
-                }
-                instrPages[currentPage].hide();
-                ++currentPage;
-                if (currentPage == instrPages.length) {
-                    // start experiment
-                    window.location.href = 'experiment.html?id=' + userId + '&g=' + gender;
-                } else {
-                    instrPages[currentPage].show();
-                }
-            });
-            $('.prev').click(function() {
-                if ($(this).hasClass('disabled')) {
-                    return;
-                }
-                instrPages[currentPage].hide();
-                --currentPage;
-                instrPages[currentPage].show();
-            });
+        <iframe id="whichbrowser" style="display: none;"></iframe>
 
-            var userId, gender;
-            $('#instr').hide();
-            var instrPages = [$('#page-1'), $('#page-2'), $('#page-3')];
-            var currentPage = 0;
-        </script>
+        <!-- JavaScript -->
+        <script type="text/javascript" src="js/landing.js"></script>
     </body>
 </html>

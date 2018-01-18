@@ -15,7 +15,7 @@
 }
 .btn-center {
     display: table;
-    margin: auto;
+    margin: auto !important;
 }
 .btn {
     margin: 20px;

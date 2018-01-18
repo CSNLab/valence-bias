@@ -4,6 +4,7 @@ var userId = '',
     firebaseUid = null,
     sid = null,
     gender = null,
+    environment = null,
     startTime = null,
     expData = {},
     hookWindow = false,
@@ -50,11 +51,17 @@ function download_data() {
     // parse user info in URL
     var parameters = window.location.search.substring(1);
 
-    if (parameters.length > 11 && parameters.length < 15) {
+    if (parameters.length > 11) {
         var parts = parameters.split(/[&=]/);
         userId = parts[1];
         sid = userId.substring(4);
         gender = parts[3];
+        if (parts.length > 4) {
+            environment = {
+                browser: decodeURIComponent(parts[5]),
+                os: decodeURIComponent(parts[7])
+            }
+        }
     } else {
         alert('Invalid user info');
         $('body').empty();
@@ -113,10 +120,14 @@ function download_data() {
                     alert(REPEAT_ALERT);
                 }
             } else {  // user does not exist
-                firebase.database().ref(userId + '/').set({
+                var info = {
                     gender: gender,
                     sid: sid || 'none'
-                });
+                }
+                if (environment) {
+                    info.environment = environment;
+                }
+                firebase.database().ref(userId + '/').set(info);
             }
         });
     });
