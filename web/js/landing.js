@@ -78,7 +78,7 @@ function get_browser() {
     var iframe = document.getElementById('whichbrowser');
     var iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
     if (iframeDocument) {
-        iframeContent = iframeDocument.getElementById('container');
+        var iframeContent = iframeDocument.getElementById('container');
         var text = $(iframeContent).html();
         var env = text.split(/<br>/)[0].substring(14).split(/ on /)
         environment = {

@@ -120,14 +120,11 @@ function download_data() {
                     alert(REPEAT_ALERT);
                 }
             } else {  // user does not exist
-                var info = {
+                firebase.database().ref(userId + '/').set({
                     gender: gender,
-                    sid: sid || 'none'
-                }
-                if (environment) {
-                    info.environment = environment;
-                }
-                firebase.database().ref(userId + '/').set(info);
+                    sid: sid || 'n/a',
+                    environment: environment || 'n/a'
+                });
             }
         });
     });
