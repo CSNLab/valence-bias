@@ -35,7 +35,7 @@ var INSTR_SCENE = '<p>' +
                     'Press space when you are ready to see the first image.' +
                   '</p>';
 var INSTR_PRAC = '<p>' +
-                    'Before the experiment starts, you will first go through a few practice trials.' +
+                    'Before the experiment starts, you will first go through a few practice trials. ' +
                     'In each of the following trials, please rate the image as positive or negative ' +
                     'as quickly and accurately as possible.' + '<br/><br/>' +
                     'Press K for a positive image and D for a negative image.' + '<br/><br/>' +
