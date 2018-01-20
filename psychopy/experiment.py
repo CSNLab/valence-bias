@@ -5,7 +5,7 @@ from psychopy_util import *
 from config import *
 
 
-def show_one_trial(image, fixation_time):
+def show_one_trial(image, fixation_time, practice_i=-1):
     # show image and try to get a response
     event.clearEvents()
     response = presenter.draw_stimuli_for_response(stimuli=(bg, image), max_wait=IMG_TIME, response_keys={'k', 'd'})
@@ -24,6 +24,20 @@ def show_one_trial(image, fixation_time):
     else:
         # show fixation
         presenter.draw_stimuli_for_duration(stimuli=(bg, plus_sign), duration=fixation_time)
+
+    if practice_i > -1:
+        if response is None:
+            feedback_stim = visual.TextStim(presenter.window, PRAC_FEEDBACK_NO_RESP, wrapWidth=1.7)
+            stims = (bg, feedback_stim)
+        else:
+            correct = response[0] == PRAC_ANSWERS[practice_i]
+            img_type = 'positive' if PRAC_ANSWERS[practice_i] == 'k' else 'negative'
+            rt_in_ms = int(response[1] * 1000)
+            feedback = PRAC_FEEDBACK.format('Correct', img_type, rt_in_ms) if correct else \
+                       PRAC_FEEDBACK.format('Incorrect', img_type, rt_in_ms)
+            feedback_stim = visual.TextStim(presenter.window, feedback, pos=(0, -0.7), wrapWidth=1.7)
+            stims = (bg, image, feedback_stim)
+        presenter.draw_stimuli_for_duration(stims, PRAC_FEEDBACK_TIME)
 
     # results
     if response is not None:
@@ -48,10 +62,12 @@ def validation(items):
     return True, ''
 
 
-def show_one_block(img_seq, fix_time_seq):
+def show_one_block(img_seq, fix_time_seq=(), practice=False):
     presenter.draw_stimuli_for_duration(stimuli=(bg, plus_sign), duration=INITIAL_FIX_TIME)
-    for i in range(NUM_TRIALS_PER_BLOCK):
-        data = show_one_trial(img_seq[i], fix_time_seq[i])
+    num_trials = len(prac_imgs) if practice else NUM_TRIALS_PER_BLOCK
+    for i in range(num_trials):
+        data = show_one_trial(img_seq[i], fixation_time=PRAC_FIX_TIME, practice_i=i) if practice else \
+               show_one_trial(img_seq[i], fix_time_seq[i])
         dataLogger.write_json(data)
 
 
@@ -90,10 +106,14 @@ if __name__ == '__main__':
     with open('fixation_times.csv', 'rU') as csvDataFile:
         reader = csv.reader(csvDataFile)
         fixation_time_sequences = [[float(t) for t in row] for row in reader]
+    # practice
+    prac_imgs = presenter.load_all_images(PRAC_IMG_FOLDER, '.jpg')
 
     # show instructions
     presenter.show_instructions(INSTR_BEGIN)
     # show trials
+    presenter.show_instructions(INSTR_PRAC, next_page_text=None)
+    show_one_block(prac_imgs, practice=True)
     presenter.show_instructions(INSTR_FACE)
     show_one_block(face_image_sequences[0], fixation_time_sequences[0])
     presenter.show_instructions(INSTR_SCENE)
