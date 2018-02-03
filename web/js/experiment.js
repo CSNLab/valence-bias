@@ -54,7 +54,7 @@ function download_data() {
     if (parameters.length > 11) {
         var parts = parameters.split(/[&=]/);
         userId = parts[1];
-        sid = userId.substring(4);
+        sid = userId;  // userId.substring(4);
         gender = parts[3];
         if (parts.length > 4) {
             environment = {
@@ -74,14 +74,14 @@ function download_data() {
         SCENE_IMGS[0] = SCENE_IMGS[0].slice(0, 2);
         SCENE_IMGS[1] = SCENE_IMGS[1].slice(0, 2);
     }
-    else if (userId.length < 5 || userId.length > 8 || !userId.startsWith('ucla') || 
-        isNaN(sid) || gender.length != 1) {
-        alert('Invalid user info');
-        cancelFullScreen();
-        $('body').empty();
-        return;
-    }
-    sid = parseInt(sid);
+//     else if (userId.length < 5 || userId.length > 8 || !userId.startsWith('ucla') || 
+//         isNaN(sid) || gender.length != 1) {
+//         alert('Invalid user info');
+//         cancelFullScreen();
+//         $('body').empty();
+//         return;
+//     }
+//     sid = parseInt(sid);
 
     // prevent closing window
     window.onbeforeunload = function() {
