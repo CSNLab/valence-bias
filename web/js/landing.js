@@ -4,11 +4,11 @@ function signin() {
     $('#user-id').removeClass('is-invalid');
     userId = $('#user-id').val();
     gender = $("input[name='gender']:checked").val();
-    if (userId != 'short' && (!userId.startsWith('ucla') || isNaN(userId.substring(4)))) {
-        // error checking
-        $('#user-id').addClass('is-invalid');
-        return;
-    }
+//     if (userId != 'short' && (!userId.startsWith('ucla') || isNaN(userId.substring(4)))) {
+//         // error checking
+//         $('#user-id').addClass('is-invalid');
+//         return;
+//     }
     $('#info').hide();
     $('#instr').show();
     get_browser();
