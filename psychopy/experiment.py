@@ -79,19 +79,15 @@ if __name__ == '__main__':
     sid = int(sinfo['ID'])
 
     # create logging file
-    infoLogger = logging.getLogger()
-    if not os.path.isdir(LOG_FOLDER):
-        os.mkdir(LOG_FOLDER)
-    logging.basicConfig(filename=LOG_FOLDER + str(sid) + '.log', level=logging.INFO,
-                        format='%(asctime)s %(levelname)8s %(message)s')
+    infoLogger = DataLogger(LOG_FOLDER, str(sid) + '.log', log_name='info_logger', logging_info=True)
     # create data file
-    dataLogger = DataLogger(DATA_FOLDER, str(sid) + '.txt')
+    dataLogger = DataLogger(DATA_FOLDER, str(sid) + '.txt', log_name='data_logger')
     # save info from the dialog box
     dataLogger.write_json({
         k: str(sinfo[k]) for k in sinfo.keys()
     })
     # create window
-    presenter = Presenter(fullscreen=(sinfo['Mode'] == 'Exp'))
+    presenter = Presenter(fullscreen=(sinfo['Mode'] == 'Exp'), info_logger='info_logger')
     plus_sign = visual.TextStim(presenter.window, text='+')
     bg = visual.Rect(presenter.window, pos=presenter.CENTRAL_POS, fillColor='#000000', size=(4.1, 4.1))
     # load sequences
