@@ -5,7 +5,7 @@ from psychopy_util import *
 from config import *
 
 
-def show_one_trial(image, fixation_time, practice_i=-1):
+def show_one_trial(image, fixation_time, block_index, practice_i=-1):
     # show image and try to get a response
     event.clearEvents()
     response = presenter.draw_stimuli_for_response(stimuli=(bg, image), max_wait=IMG_TIME, response_keys={'k', 'd'})
@@ -44,6 +44,7 @@ def show_one_trial(image, fixation_time, practice_i=-1):
         data = {'resp_key': response[0], 'rt': response[1], 'img_name': image._imName}
     else:
         data = {'resp_key': 'None', 'img_name': image._imName}
+    data['block_index'] = block_index
     return data
 
 
@@ -62,12 +63,12 @@ def validation(items):
     return True, ''
 
 
-def show_one_block(img_seq, fix_time_seq=(), practice=False):
+def show_one_block(img_seq, block_index, fix_time_seq=(), practice=False):
     presenter.draw_stimuli_for_duration(stimuli=(bg, plus_sign), duration=INITIAL_FIX_TIME)
     num_trials = len(prac_imgs) if practice else NUM_TRIALS_PER_BLOCK
     for i in range(num_trials):
-        data = show_one_trial(img_seq[i], fixation_time=PRAC_FIX_TIME, practice_i=i) if practice else \
-               show_one_trial(img_seq[i], fix_time_seq[i])
+        data = show_one_trial(img_seq[i], fixation_time=PRAC_FIX_TIME, block_index=block_index, practice_i=i) \
+            if practice else show_one_trial(img_seq[i], fix_time_seq[i], block_index)
         dataLogger.write_json(data)
 
 
@@ -113,15 +114,15 @@ if __name__ == '__main__':
     presenter.show_instructions(INSTR_BEGIN)
     # show trials
     presenter.show_instructions(INSTR_PRAC, next_page_text=None)
-    show_one_block(prac_imgs, practice=True)
+    show_one_block(prac_imgs, 'prac', practice=True)
     presenter.show_instructions(INSTR_FACE)
-    show_one_block(face_image_sequences[0], fixation_time_sequences[0])
+    show_one_block(face_image_sequences[0], 1, fixation_time_sequences[0])
     presenter.show_instructions(INSTR_SCENE)
-    show_one_block(scene_image_sequences[0], fixation_time_sequences[1])
+    show_one_block(scene_image_sequences[0], 2, fixation_time_sequences[1])
     presenter.show_instructions(INSTR_FACE)
-    show_one_block(face_image_sequences[1], fixation_time_sequences[2])
+    show_one_block(face_image_sequences[1], 3, fixation_time_sequences[2])
     presenter.show_instructions(INSTR_SCENE)
-    show_one_block(scene_image_sequences[1], fixation_time_sequences[3])
+    show_one_block(scene_image_sequences[1], 4, fixation_time_sequences[3])
 
     # end of experiment
     presenter.show_instructions(INSTR_END)
