@@ -1,15 +1,16 @@
+from __future__ import print_function
 import csv
 import os
 import random
 
 numBlocksPerType = 4
 
-allFaces = [img for img in os.listdir('valence_img/faces') if img.endswith('jpg')]
+allFaces = [img for img in os.listdir('../valence_img/faces') if img.endswith('jpg')]
 ambFaces = [img for img in allFaces if ('SP' in img or 'SU' in img)]
 hapFaces = [img for img in allFaces if 'HA' in img]
 angFaces = [img for img in allFaces if 'AN' in img]
 
-allScenes = [img for img in os.listdir('valence_img/scenes') if img.endswith('jpg')]
+allScenes = [img for img in os.listdir('../valence_img/scenes') if img.endswith('jpg')]
 ambScenes = [img for img in allScenes if img.startswith('A')]
 posScenes = [img for img in allScenes if img.startswith('P')]
 negScenes = [img for img in allScenes if img.startswith('N')]
@@ -21,12 +22,13 @@ with open('stim.csv', 'r') as stimFile:
 	counter = 2 * numBlocksPerType
 	for row in reader:
 		if counter % 2 == 0:
-			ambStim, posStim, negStim, stimSeqs = list(ambFaces), list(hapFaces), list(angFaces), faceSeqs
-		else:
-			ambStim, posStim, negStim, stimSeqs = list(ambScenes), list(posScenes), list(negScenes), sceneSeqs
-		random.shuffle(ambStim)
-		random.shuffle(posStim)
-		random.shuffle(negStim)
+			if counter <= numBlocksPerType:
+				ambStim, posStim, negStim, stimSeqs = list(ambFaces), list(hapFaces), list(angFaces), faceSeqs
+			else:
+				ambStim, posStim, negStim, stimSeqs = list(ambScenes), list(posScenes), list(negScenes), sceneSeqs
+			random.shuffle(ambStim)
+			random.shuffle(posStim)
+			random.shuffle(negStim)
 		stimSeq = []
 		for stimType in row:
 			if stimType == '2':
@@ -39,7 +41,8 @@ with open('stim.csv', 'r') as stimFile:
 		counter -= 1
 		if counter == 0:
 			break
-
+print(faceSeqs)
+print(sceneSeqs)
 with open('stimuli.csv', 'w') as outfile:
 	writer = csv.writer(outfile)
 	for seq in faceSeqs:
