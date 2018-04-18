@@ -5,7 +5,7 @@ from psychopy_util import *
 from config import *
 
 
-def show_one_trial(image, fixation_time, practice_i=-1):
+def show_one_trial(image, fixation_time, block_index, practice_i=-1):
     # show image and try to get a response
     event.clearEvents()
     response = presenter.draw_stimuli_for_response(stimuli=(bg, image), max_wait=IMG_TIME, response_keys={'k', 'd'})
@@ -44,6 +44,7 @@ def show_one_trial(image, fixation_time, practice_i=-1):
         data = {'resp_key': response[0], 'rt': response[1], 'img_name': image._imName}
     else:
         data = {'resp_key': 'None', 'img_name': image._imName}
+    data['block_index'] = block_index
     return data
 
 
@@ -62,12 +63,12 @@ def validation(items):
     return True, ''
 
 
-def show_one_block(img_seq, fix_time_seq=(), practice=False):
+def show_one_block(img_seq, block_index, fix_time_seq=(), practice=False):
     presenter.draw_stimuli_for_duration(stimuli=(bg, plus_sign), duration=INITIAL_FIX_TIME)
     num_trials = len(prac_imgs) if practice else NUM_TRIALS_PER_BLOCK
     for i in range(num_trials):
-        data = show_one_trial(img_seq[i], fixation_time=PRAC_FIX_TIME, practice_i=i) if practice else \
-               show_one_trial(img_seq[i], fix_time_seq[i])
+        data = show_one_trial(img_seq[i], fixation_time=PRAC_FIX_TIME, block_index=block_index, practice_i=i) \
+            if practice else show_one_trial(img_seq[i], fix_time_seq[i], block_index)
         dataLogger.write_json(data)
 
 
@@ -78,19 +79,15 @@ if __name__ == '__main__':
     sid = int(sinfo['ID'])
 
     # create logging file
-    infoLogger = logging.getLogger()
-    if not os.path.isdir(LOG_FOLDER):
-        os.mkdir(LOG_FOLDER)
-    logging.basicConfig(filename=LOG_FOLDER + str(sid) + '.log', level=logging.INFO,
-                        format='%(asctime)s %(levelname)8s %(message)s')
+    infoLogger = DataLogger(LOG_FOLDER, str(sid) + '.log', log_name='info_logger', logging_info=True)
     # create data file
-    dataLogger = DataLogger(DATA_FOLDER, str(sid) + '.txt')
+    dataLogger = DataLogger(DATA_FOLDER, str(sid) + '.txt', log_name='data_logger')
     # save info from the dialog box
     dataLogger.write_json({
         k: str(sinfo[k]) for k in sinfo.keys()
     })
     # create window
-    presenter = Presenter(fullscreen=(sinfo['Mode'] == 'Exp'))
+    presenter = Presenter(fullscreen=(sinfo['Mode'] == 'Exp'), info_logger='info_logger')
     plus_sign = visual.TextStim(presenter.window, text='+')
     bg = visual.Rect(presenter.window, pos=presenter.CENTRAL_POS, fillColor='#000000', size=(4.1, 4.1))
     # load sequences
@@ -113,12 +110,12 @@ if __name__ == '__main__':
     presenter.show_instructions(INSTR_BEGIN)
     # show trials
     presenter.show_instructions(INSTR_PRAC, next_page_text=None)
-    show_one_block(prac_imgs, practice=True)
+    show_one_block(prac_imgs, 'prac', practice=True)
     for i in range(4):  # running 4 face blocks + scene blocks (= 8 blocks total)
         presenter.show_instructions(INSTR_FACE)
-        show_one_block(face_image_sequences[i], fixation_time_sequences[i * 2])
+        show_one_block(face_image_sequences[i], i * 2 + 1, fixation_time_sequences[i * 2])
         presenter.show_instructions(INSTR_SCENE)
-        show_one_block(scene_image_sequences[i], fixation_time_sequences[i * 2 + 1])
+        show_one_block(scene_image_sequences[i], i * 2 + 2, fixation_time_sequences[i * 2 + 1])
 
     # end of experiment
     presenter.show_instructions(INSTR_END)
