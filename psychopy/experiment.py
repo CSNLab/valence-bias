@@ -97,10 +97,10 @@ if __name__ == '__main__':
     with open('stimuli.csv', 'rU') as csvDataFile:
         reader = csv.reader(csvDataFile)
         face_image_sequences, scene_image_sequences = [], []
-        for i in range(2):  # first 2 rows are faces
+        for i in range(4):  # first 4 rows are faces
             face_image_sequences.append(
                 [visual.ImageStim(presenter.window, image=IMG_FOLDER_FACES + img) for img in reader.next()])
-        for i in range(2):  # last 2 rows are scenes
+        for i in range(4):  # last 4 rows are scenes
             scene_image_sequences.append(
                 [visual.ImageStim(presenter.window, image=IMG_FOLDER_SCENES + img) for img in reader.next()])
     with open('fixation_times.csv', 'rU') as csvDataFile:
@@ -114,14 +114,11 @@ if __name__ == '__main__':
     # show trials
     presenter.show_instructions(INSTR_PRAC, next_page_text=None)
     show_one_block(prac_imgs, practice=True)
-    presenter.show_instructions(INSTR_FACE)
-    show_one_block(face_image_sequences[0], fixation_time_sequences[0])
-    presenter.show_instructions(INSTR_SCENE)
-    show_one_block(scene_image_sequences[0], fixation_time_sequences[1])
-    presenter.show_instructions(INSTR_FACE)
-    show_one_block(face_image_sequences[1], fixation_time_sequences[2])
-    presenter.show_instructions(INSTR_SCENE)
-    show_one_block(scene_image_sequences[1], fixation_time_sequences[3])
+    for i in range(4):  # running 4 face blocks + scene blocks (= 8 blocks total)
+        presenter.show_instructions(INSTR_FACE)
+        show_one_block(face_image_sequences[i], fixation_time_sequences[i * 2])
+        presenter.show_instructions(INSTR_SCENE)
+        show_one_block(scene_image_sequences[i], fixation_time_sequences[i * 2 + 1])
 
     # end of experiment
     presenter.show_instructions(INSTR_END)
